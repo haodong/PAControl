@@ -8,13 +8,22 @@ Just master your proxies.
 3.  Auto bypass LAN and commonly domestic website addresses in China.
 4.  More is comming soon.
 
+##  Cautions
+-	This tool is designed for people who need to frequently switch between different proxies. Therefore, by using it, you are supposed having been using the following software:
+	- [Mavericks](https://en.wikipedia.org/wiki/OS_X_Mavericks): It maybe compatible to your OSX, but there is **NO** guarantee for potential risks.
+	- [Goagent](https://github.com/goagent/goagent)
+	- [Shadowsocks](https://github.com/shadowsocks/shadowsocks)
+	- [ShadowsocksX](https://github.com/shadowsocks/shadowsocks-iOS/wiki/Shadowsocks-for-OSX-Help)
+	- [MEOW](https://github.com/renzhn/MEOW)
+-	Free as it is, **NO** warrant is provided. In effect, I code and share it just for studying. Users should not use it for illegal purposes.
+
 ##  Developing Process
 - [x] PAC
 - [x] Global
 - [x] Bypass
-- [x] Multiple Options
+- [x] Multiple options
 - [ ] JSON extension
-- [ ] Customize JSON databases
+- [ ] Customize proxiy configurations 
 
 ##  Usage
 ```
@@ -64,3 +73,6 @@ optional arguments:
 	Network has been set to Whitelist PAC.
 	```
 	![white](examples/white.png)
+
+##  License
+[GPL v3.0](https://github.com/haodong/pacontrol/blob/master/LICENSE)
