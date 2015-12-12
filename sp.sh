@@ -1,11 +1,11 @@
 #!/bin/bash
 
 QUERY="${1}"
-cmdp="sudo networksetup -setautoproxyurl Ethernet"
 case $QUERY in
-	-g)	
+	-g)	inbypass=$(route -n get default | grep 'gateway' | awk '{print $2}' | perl -pe 's/^(\d+\.\d+\.\d+\.)\d+/$1/ge')*
+		exbypass=$( cat ~/.meow/direct | awk '{printf "%s ",$0}' | sed 's/,.$//' )
 		sudo networksetup -setsocksfirewallproxy Ethernet 127.0.0.1 1080
-		sudo networksetup -setproxybypassdomains Ethernet "192.168.1.*" baidu.com
+		sudo networksetup -setproxybypassdomains Ethernet $inbypass $exbypass
 		label="Global Mode"
 		;;
 	-p)	TYPE="${2}"
@@ -18,10 +18,21 @@ case $QUERY in
 				;;
 		esac
 		sudo networksetup -setsocksfirewallproxystate Ethernet off
-		echo $cmdp $pac | bash
+		sudo networksetup -setautoproxyurl Ethernet $pac
+		;;
+	-h|--help)	
+		echo "usage: `basename ${0}`: [-g] | [-p PACtype]
+
+optional arguments:
+ -h, --help		show this help
+ -g				to Global Mode
+ -p PAC			to PAC Mode, for example,
+ 				-p b	Blacklist PAC location
+ 				-p w	Whitelist PAC location"
+		exit 1
 		;;
 	*)	
-		echo "`basename ${0}`:	usage: [-g] | [-p PACtype]"
+		echo "usage: `basename ${0}`: [-g] | [-p PACtype]"
 		exit 1
 		;;
 esac
