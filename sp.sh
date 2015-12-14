@@ -4,25 +4,46 @@ checkHTTP="networksetup -getwebproxy Ethernet | grep '^Enabled' | awk '{print \$
 checkHTTPS="networksetup -getsecurewebproxy Ethernet | grep '^Enabled' | awk '{print \$2}'"
 checkSOCKS="networksetup -getsocksfirewallproxy Ethernet | grep '^Enabled' | awk '{print \$2}'"
 usage="usage: `basename ${0}`: [-h|--help] [-b on|off] [-g <proxy>] [-p PACtype]"
-while getopts b:g:p:h opt
+while getopts b:g:p:ch opt
 do
 	case "$opt" in
+		c)
+			echo
+			echo "Checking HTTP Proxy Setting..."
+			networksetup -getwebproxy Ethernet
+			echo
+			echo "Checking HTTPS Proxy Setting..."
+			networksetup -getsecurewebproxy Ethernet
+			echo
+			echo "Checking Socks Proxy Setting..."
+			networksetup -getsocksfirewallproxy Ethernet
+			;;
 		g)	case $OPTARG in
+				d)
+					sudo networksetup -setwebproxystate Ethernet off
+					sudo networksetup -setsecurewebproxystate Ethernet off
+					sudo networksetup -setsocksfirewallproxystate Ethernet off
+	        		echo "`basename ${0}` -b off" | bash
+					label="direct"
+					;;
 	            ss)
 	            	sudo networksetup -setsocksfirewallproxy Ethernet 127.0.0.1 1080
 	            	sudo networksetup -setsecurewebproxystate Ethernet off
+	        		echo "`basename ${0}` -b on" | bash
+	            	label="Shadowsocks"
 	                ;;
 	            gae)
 	            	sudo networksetup -setsecurewebproxy Ethernet 127.0.0.1 8087
 	            	sudo networksetup -setsocksfirewallproxystate Ethernet off
+	        		echo "`basename ${0}` -b on" | bash
+	            	label="GoAgent"
 	                ;;
 				*)
 					echo "`basename ${0}`: illegal option -- $OPTARG"; echo $usage; exit 1
 					;;
 	        esac
 	        sudo networksetup -setautoproxystate Ethernet off
-	        echo "Network has been set to Global Mode."
-	        echo "`basename ${0}` -b on" | bash
+	        echo "Network has been set to Global Mode of $label."
 			;;
 		p)	case $OPTARG in
 				b|black)  pac="http://127.0.0.1:8090/proxy.pac"
