@@ -64,7 +64,7 @@ do
 		b)	case $OPTARG in
 				on)	
 					inbypass=$(route -n get default | grep 'gateway' | awk '{print $2}' | perl -pe 's/^(\d+\.\d+\.\d+\.)\d+/$1/ge')*
-					exbypass=$(cat ~/.meow/direct | awk '{printf "%s ",$0}' | sed 's/,.$//')
+					exbypass=$(cat ~/.meow/direct | grep -v '^#' | awk '{printf "%s ",$0}' | sed 's/,.$//')
 					sudo networksetup -setproxybypassdomains Ethernet $inbypass $exbypass
 					;;
 				off)
